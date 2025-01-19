@@ -1,0 +1,12 @@
+---
+title: "R interim analyser BEYOND Voksen"
+author: "MZS"
+format: html
+---
+
+# Overordnet status:
+Aktuelt 50 inkluderet med 34 SDCC og 16 SDCA.
+Af disse forelægger analyser for xx deltagere der er afsluttet per protokol, heraf xx AID brugere og xx kontroller.
+
+## Demografi:
+Oversigtstabel over demografi ved inklusion og afslutning:
