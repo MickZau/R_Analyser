@@ -108,6 +108,45 @@ DMS_followup <- CANTAB |>
     "DMS correct choice latency (all)" = mean(`DMS correct choice latency (all)`),
     "DMS correct choice latency SD (all)" = mean(`DMS correct choice latency SD (all)`)
   )
+
+#Data for SWM undersøgelse
+SWM_screen <- CANTAB |>
+  filter(
+    Færdig == "Ja",
+    `Visit Identifier` == "Screen"
+    ) |>
+  group_by(`Gruppe`) |> 
+  rename(
+    "SWM Total Errors (all)" = SWMTE468,
+    "SWM Between Errors (all)" = SWMBE468,
+    "SWM Within Errors (all)" = SWMWE468,
+    "SWM strategy (6-12 boxes)" = SWMSX
+    ) |> 
+  summarise(
+    "SWM Total Errors (all)" = mean(`SWM Total Errors (all)`),
+    "SWM Between Errors (all)" = mean(`SWM Between Errors (all)`),
+    "SWM Within Errors (all)" = mean(`SWM Within Errors (all)`),
+    "SWM strategy (6-12 boxes)" = mean(`SWM strategy (6-12 boxes)`)
+  )
+
+SWM_followup <- CANTAB |>
+  filter(
+    Færdig == "Ja",
+    `Visit Identifier` == "Afslut"
+    ) |>
+  group_by(`Gruppe`) |> 
+  rename(
+    "SWM Total Errors (all)" = SWMTE468,
+    "SWM Between Errors (all)" = SWMBE468,
+    "SWM Within Errors (all)" = SWMWE468,
+    "SWM strategy (6-12 boxes)" = SWMSX
+    ) |> 
+  summarise(
+    "SWM Total Errors (all)" = mean(`SWM Total Errors (all)`),
+    "SWM Between Errors (all)" = mean(`SWM Between Errors (all)`),
+    "SWM Within Errors (all)" = mean(`SWM Within Errors (all)`),
+    "SWM strategy (6-12 boxes)" = mean(`SWM strategy (6-12 boxes)`)
+  )
 ```
 
 ### Følgende resultater er for Rapid Visual Information Processing undersøgelsen ved hhv. screen og follow-up:
@@ -145,6 +184,26 @@ DMS_screen |>
 #| labe: tbl-dms-followup
 #| tbl-cap: "Under: DMS værdier ved follow-up for hver gruppe"
 DMS_followup |> 
+  knitr::kable(
+    align = "cccccc"
+    )
+```
+
+### Følgende resultater er for Spatial Working Memory undersøgelsen ved hhv. screen og follow-up:
+
+```{r}
+#| labe: tbl-swm-baseline
+#| tbl-cap: "Under: SWM værdier ved baseline for hver gruppe"
+SWM_screen |> 
+  knitr::kable(
+    align = "cccccc"
+    )
+```
+
+```{r}
+#| labe: tbl-swm-followup
+#| tbl-cap: "Under: SWM værdier ved follow-up for hver gruppe"
+SWM_followup |> 
   knitr::kable(
     align = "cccccc"
     )
