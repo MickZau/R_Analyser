@@ -1,0 +1,25 @@
+---
+title: "Test af analyseskema"
+format: html
+---
+
+```{r setup}
+library(tidyverse)
+blodtryk <- read_excel("L:/LovbeskyttetMapper/AID projekt - Collab grant/WP2+3 (AIDBeyond)/AID-BEYOND Trial Master File/16) Data analyser/Analyseskema samlet NY.xlsx", 
+    sheet = "Blodtryk")
+blodtryksort <- blodtryk |> 
+  filter(`Færdig?`=="Ja") |> 
+  rename("24bt" = "24 Middel sys før")
+```
+
+## Blodtryk:
+Alle inkluderede deltagere har udført døgnblodtryksmålinger. Følgende målinger er fundet:
+
+```{r}
+ggplot(blodtryksort, aes(x = Visit, y = `24bt`, colour = Gruppe)) +
+  geom_point(
+    na.rm = TRUE
+  )
+```
+
+
