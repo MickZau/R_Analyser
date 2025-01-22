@@ -1,0 +1,151 @@
+---
+title: "CANTAB"
+format: html
+execute:
+  echo: false
+  warning: false
+  message: false
+---
+
+```{r}
+library(tidyverse)
+library(readxl)
+library(kableExtra)
+CANTAB <- read_excel("L:/LovbeskyttetMapper/AID projekt - Collab grant/WP2+3 (AIDBeyond)/AID-BEYOND Trial Master File/16) Data analyser/CANTAB_endelig.xlsx")
+```
+
+```{r}
+#Data for RVP undersøgelser
+RVP_screen <- CANTAB |>
+  filter(
+    Færdig == "Ja",
+    `Visit Identifier` == "Screen"
+    ) |>
+  group_by(`Gruppe`) |> 
+  rename(
+    "RVP Response latency (ms)" = RVPML,
+    "RVP Response SD" = RVPLSD,
+    "RVP Total Hits" = RVPTH,
+    "RVP Total Misses" = RVPTM,
+    "RVP Total False Alarms" = RVPTFA,
+  ) |> 
+  summarise(
+    "RVP Total Hits" = mean(`RVP Total Hits`),
+    "RVP Total Misses" = mean(`RVP Total Misses`),
+    "RVP Total False Alarms" = mean(`RVP Total False Alarms`),
+    "RVP Response latency (ms)" = mean(`RVP Response latency (ms)`),
+    "RVP Response SD" = mean(`RVP Response SD`)
+  )
+
+RVP_followup <- CANTAB |>
+  filter(
+    Færdig == "Ja",
+    `Visit Identifier` == "Afslut"
+    ) |>
+  group_by(`Gruppe`) |> 
+  rename(
+    "RVP Response latency (ms)" = RVPML,
+    "RVP Response SD" = RVPLSD,
+    "RVP Total Hits" = RVPTH,
+    "RVP Total Misses" = RVPTM,
+    "RVP Total False Alarms" = RVPTFA,
+  ) |> 
+  summarise(
+    "RVP Total Hits" = mean(`RVP Total Hits`),
+    "RVP Total Misses" = mean(`RVP Total Misses`),
+    "RVP Total False Alarms" = mean(`RVP Total False Alarms`),
+    "RVP Response latency (ms)" = mean(`RVP Response latency (ms)`),
+    "RVP Response SD" = mean(`RVP Response SD`)
+  )
+
+#Data for DMS undersøgelse
+DMS_screen <- CANTAB |>
+  filter(
+    Færdig == "Ja",
+    `Visit Identifier` == "Screen"
+    ) |>
+  group_by(`Gruppe`) |> 
+  rename(
+    "DMS number of correct choices (all)" = DMSTC,
+    "DMS % correct choices (0 sec)" = DMSPC0,
+    "DMS % correct choices (4 sec)" = DMSPC4,
+    "DMS % correct choices (12 sec)" = DMSPC12,
+    "DMS mean number of choices" = DMSCC,
+    "DMS correct choice latency (all)" = DMSMLAD,
+    "DMS correct choice latency SD (all)" = DMSLADSD
+  ) |> 
+  summarise(
+    "DMS number of correct choices (all)" = mean(`DMS number of correct choices (all)`),
+    "DMS % correct choices (0 sec)" = mean(`DMS % correct choices (0 sec)`),
+    "DMS % correct choices (4 sec)" = mean(`DMS % correct choices (4 sec)`),
+    "DMS % correct choices (12 sec)" = mean(`DMS % correct choices (12 sec)`),
+    "DMS mean number of choices" = mean(`DMS mean number of choices`),
+    "DMS correct choice latency (all)" = mean(`DMS correct choice latency (all)`),
+    "DMS correct choice latency SD (all)" = mean(`DMS correct choice latency SD (all)`)
+  )
+
+DMS_followup <- CANTAB |>
+  filter(
+    Færdig == "Ja",
+    `Visit Identifier` == "Afslut"
+    ) |>
+  group_by(`Gruppe`) |> 
+  rename(
+    "DMS number of correct choices (all)" = DMSTC,
+    "DMS % correct choices (0 sec)" = DMSPC0,
+    "DMS % correct choices (4 sec)" = DMSPC4,
+    "DMS % correct choices (12 sec)" = DMSPC12,
+    "DMS mean number of choices" = DMSCC,
+    "DMS correct choice latency (all)" = DMSMLAD,
+    "DMS correct choice latency SD (all)" = DMSLADSD
+  ) |> 
+  summarise(
+    "DMS number of correct choices (all)" = mean(`DMS number of correct choices (all)`),
+    "DMS % correct choices (0 sec)" = mean(`DMS % correct choices (0 sec)`),
+    "DMS % correct choices (4 sec)" = mean(`DMS % correct choices (4 sec)`),
+    "DMS % correct choices (12 sec)" = mean(`DMS % correct choices (12 sec)`),
+    "DMS mean number of choices" = mean(`DMS mean number of choices`),
+    "DMS correct choice latency (all)" = mean(`DMS correct choice latency (all)`),
+    "DMS correct choice latency SD (all)" = mean(`DMS correct choice latency SD (all)`)
+  )
+```
+
+### Følgende resultater er for Rapid Visual Information Processing undersøgelsen ved hhv. screen og follow-up:
+
+```{r}
+#| labe: tbl-rvp-baseline
+#| tbl-cap: "Under: RVP værdier ved baseline for hver gruppe"
+RVP_screen |> 
+  knitr::kable(
+    align = "cccccc"
+    )
+```
+
+```{r}
+#| labe: tbl-rvp-followup
+#| tbl-cap: "Under: RVP værdier ved follow-up for hver gruppe"
+RVP_followup |> 
+  knitr::kable(
+    align = "cccccc"
+    )
+```
+
+### Følgende resultater er for Delayed Matching to Sampling undersøgelsen ved hhv. screen og follow-up:
+
+```{r}
+#| labe: tbl-dms-baseline
+#| tbl-cap: "Under: DMS værdier ved baseline for hver gruppe"
+DMS_screen |> 
+  knitr::kable(
+    align = "cccccc"
+    )
+```
+
+```{r}
+#| labe: tbl-dms-followup
+#| tbl-cap: "Under: DMS værdier ved follow-up for hver gruppe"
+DMS_followup |> 
+  knitr::kable(
+    align = "cccccc"
+    )
+```
