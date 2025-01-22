@@ -147,6 +147,45 @@ SWM_followup <- CANTAB |>
     "SWM Within Errors (all)" = mean(`SWM Within Errors (all)`),
     "SWM strategy (6-12 boxes)" = mean(`SWM strategy (6-12 boxes)`)
   )
+
+#Data for SST undersøgelse
+SST_screen <- CANTAB |>
+  filter(
+    Færdig == "Ja",
+    `Visit Identifier` == "Screen"
+    ) |>
+  group_by(`Gruppe`) |> 
+  rename(
+    "SST Stop Reaction Time (ms)" = SSTSSRT,
+    "SST Median Go Reaction Time (ms)" = SSTMRTG,
+    "SST Stop Errors" = SSTDES,
+    "SST Go Errors" = SSTDEG
+    ) |> 
+  summarise(
+    "SST Stop Reaction Time (ms)" = mean(`SST Stop Reaction Time (ms)`),
+    "SST Median Go Reaction Time (ms)" = mean(`SST Median Go Reaction Time (ms)`),
+    "SST Stop Errors" = mean(`SST Stop Errors`),
+    "SST Go Errors" = mean(`SST Go Errors`)
+  )
+
+SST_followup <- CANTAB |>
+  filter(
+    Færdig == "Ja",
+    `Visit Identifier` == "Afslut"
+    ) |>
+  group_by(`Gruppe`) |> 
+  rename(
+    "SST Stop Reaction Time (ms)" = SSTSSRT,
+    "SST Median Go Reaction Time (ms)" = SSTMRTG,
+    "SST Stop Errors" = SSTDES,
+    "SST Go Errors" = SSTDEG
+    ) |> 
+  summarise(
+    "SST Stop Reaction Time (ms)" = mean(`SST Stop Reaction Time (ms)`),
+    "SST Median Go Reaction Time (ms)" = mean(`SST Median Go Reaction Time (ms)`),
+    "SST Stop Errors" = mean(`SST Stop Errors`),
+    "SST Go Errors" = mean(`SST Go Errors`)
+  )
 ```
 
 ### Følgende resultater er for Rapid Visual Information Processing undersøgelsen ved hhv. screen og follow-up:
@@ -204,6 +243,26 @@ SWM_screen |>
 #| labe: tbl-swm-followup
 #| tbl-cap: "Under: SWM værdier ved follow-up for hver gruppe"
 SWM_followup |> 
+  knitr::kable(
+    align = "cccccc"
+    )
+```
+
+### Følgende resultater er for Stop Signal Task undersøgelsen ved hhv. screen og follow-up:
+
+```{r}
+#| labe: tbl-sst-baseline
+#| tbl-cap: "Under: SST værdier ved baseline for hver gruppe"
+SST_screen |> 
+  knitr::kable(
+    align = "cccccc"
+    )
+```
+
+```{r}
+#| labe: tbl-sst-followup
+#| tbl-cap: "Under: SST værdier ved follow-up for hver gruppe"
+SST_followup |> 
   knitr::kable(
     align = "cccccc"
     )
