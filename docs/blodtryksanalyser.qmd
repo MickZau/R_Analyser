@@ -1,6 +1,10 @@
 ---
-title: "Test af analyseskema"
+title: "Blodtryksmålinger"
 format: html
+execute:
+  echo: false
+  warning: false
+  message: false
 ---
 
 ```{r setup}
@@ -9,17 +13,19 @@ blodtryk <- read_excel("L:/LovbeskyttetMapper/AID projekt - Collab grant/WP2+3 (
     sheet = "Blodtryk")
 blodtryksort <- blodtryk |> 
   filter(`Færdig?`=="Ja") |> 
-  rename("24bt" = "24 Middel sys før")
+  rename("24sysbt" = "24 Middel sys før")
 ```
 
 ## Blodtryk:
 Alle inkluderede deltagere har udført døgnblodtryksmålinger. Følgende målinger er fundet:
 
 ```{r}
-ggplot(blodtryksort, aes(x = Visit, y = `24bt`, colour = Gruppe)) +
-  geom_point(
-    na.rm = TRUE
-  )
+#| label: fig-sysbt-change
+#| fig-subcap: "Gennemsnitligt systolisk blodtryk over 24 timer"
+blodtryksort |> 
+  ggplot(aes(x = Visit, y = `24sysbt`, colour = Gruppe, group = Deltager)) +
+  geom_point() + 
+  geom_line()
 ```
 
 

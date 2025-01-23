@@ -188,6 +188,16 @@ SST_followup <- CANTAB |>
   )
 ```
 
+## Beskrivelse:
+
+CANTAB undersøgelsen udføres for at teste kognition hos deltagerne. Der testes for: 
+1.Sustained attention (evnen til at holde fokus i lang tid ad gangen) med Rapid Visual Information Processing undersøgelsen (RVP). 
+2.Kort-tids visuel hukommelse med Delayed Matching to Sample (DMS) undersøgelsen. 
+3.Arbejdshukommelse og planlægningsevne med Spatial Working Memory (SWM) undersøgelsen. 
+4.Reaktionsevne og impulskontrol med Stop Signal Task (SST) undersøgelsen.
+
+Det kan være noget abstrakt at fortolke resultaterne af undersøgelserne der både inderholder konkrete, målbare data, udregnede composite data og kvalitetsdata. Det er forskelligt for hver data om en høj eller lav værdi er positivt. Nedenfor følger en nedkogt oversigt over resultater for både screen og follow-up, baseret på udvalgte værdier (ud af de 83 værdier der genereres).
+
 ### Følgende resultater er for Rapid Visual Information Processing undersøgelsen ved hhv. screen og follow-up:
 
 ```{r}
@@ -251,7 +261,7 @@ SWM_followup |>
 ### Følgende resultater er for Stop Signal Task undersøgelsen ved hhv. screen og follow-up:
 
 ```{r}
-#| labe: tbl-sst-baseline
+#| label: tbl-sst-baseline
 #| tbl-cap: "Under: SST værdier ved baseline for hver gruppe"
 SST_screen |> 
   knitr::kable(
@@ -260,7 +270,7 @@ SST_screen |>
 ```
 
 ```{r}
-#| labe: tbl-sst-followup
+#| label: tbl-sst-followup
 #| tbl-cap: "Under: SST værdier ved follow-up for hver gruppe"
 SST_followup |> 
   knitr::kable(
