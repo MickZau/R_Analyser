@@ -1,0 +1,98 @@
+---
+title: "PRO skemaer"
+format: html
+execute:
+  echo: false
+  warning: false
+  message: false
+---
+
+```{r setup}
+library(tidyverse)
+library(readxl)
+PROS <- read_excel("L:/LovbeskyttetMapper/AID projekt - Collab grant/WP2+3 (AIDBeyond)/AID-BEYOND Trial Master File/16) Data analyser/Analyseskema samlet NY.xlsx", 
+    sheet = "Pro skemaer", skip = 2)
+PROsort <- PROS |> 
+  filter(`Færdig`=="Ja")
+```
+
+## PSQI
+PSQI skemaet måler forskellige aspekter af søvn, målt for **den seneste måned**. Aktuelt er der problemer med at trække data fra REDCap til udregning af komponent og globale scorer i skemaet. Indtil dette er løst kan kun den procentuelle sleep efficiency (% af tiden man ligger i sengen hvor man rent faktisk sover), blive rapporteret. Dette ses nedenfor:
+```{r}
+PROsort |> 
+  group_by(`Gruppe`) |> 
+  filter(`Deltager`<8 | `Deltager`>8) |> 
+  summarise(
+    "Efficiency før" = mean(`PSQI Efficiency før`),
+    "Efficiency ændring" = mean(`PSQI Forskel`,na.rm = FALSE)
+  ) |> 
+  knitr::kable()
+```
+
+#### Delkonklusion:
+
+
+## WHO-5:
+Skemaet måler trivsel ud fra 5 forskellige spørgsmål om hvordan deltageren har haft det **de sidste 2 uger**. Hvert spørgsmål scores mellem 0 og 5 hvor 5 er bedst. Den samlede score udregnes ved at lægge de 5 værdier sammen og gange dem op med 4, hvormed der scores mellem 0 og 100. En samlet score over 50 er normalt, alt under peger på forskellige grader af mistrivsel. Resultatet ses nedenfor:
+```{r}
+PROsort |> 
+  group_by(`Gruppe`) |> 
+  summarise(
+    "WHO-5 baseline" = mean(`WHO5 Før`),
+    "WHO-5 ændring" = mean(`WHO5 Forskel`)
+  ) |> 
+  knitr::kable()
+```
+
+#### Delkonklusion:
+
+## EQ-5D-5L:
+Skemaet måler på generel sundhed ud fra 5 "dimension": Mobilitet, personlig pleje, sædvanlige aktiviteter, smerter og angst/depression. Alle spørgsmålene retter sig mod hvordan deltageren har det **i dag** og hver kategori måles mellem 1 og 5, hvor **5 er værst**. Det er lidt usikkert hvordan scoren skal tolkes da det lader til at blive målt ud fra en index værdi der er indhentet fra andre publikationer. For nu udregnes værdien som en sum af de enkelte kategorier. Endvidere bliver deltagerne bedt om at gradere hvor godt de har det ud fra en 0-100 VAS skala, hvor 100 er bedst. Værdierne begge ses nedenfor:
+```{r}
+PROsort |> 
+  group_by(`Gruppe`) |> 
+  summarise(
+    "EQ-5D-5L baseline" = mean(`EQ Score før`),
+    "EQ-5D-5L ændring" = mean(`EQ Score forskel`),
+    "VAS baseline" = mean(`EQ VAS før`),
+    "VAS ændring" = mean(`EQ VAS forskel`)
+  ) |> 
+  knitr::kable()
+```
+
+## HFS-II
+Skemaet måler på graden af frygt for hypoglykæmi. Der er 11 spørgsmål vedrørende adfærd for at undgå hypoglykæmi og bekymringer for dette. Der spørges specifikt til **den seneste måned**. Hvert spørgsmål kan give mellem 0 og 4 point hvor 4 er værst, den samlede HFS score er en sum af disse værdier og er derfor mellem 0 og 44. Der er ikke nogen umiddelbar cutoff værdi. De udregnede værdier ses nedenfor:
+```{r}
+PROsort |> 
+  group_by(`Gruppe`) |> 
+  summarise(
+    "Score baseline" = mean(`HFS Score før`),
+    "Score ændring" = mean(`HFS Forskel`)
+  ) |> 
+  knitr::kable()
+```
+
+#### Delkonklusion:
+
+
+## DEPSR
+```{r}
+PROsort |> 
+  group_by(`Gruppe`) |> 
+  summarise(
+    "Score baseline" = mean(`DEPSR Score før`),
+    "Score ændring" = mean(`DEPSR Forskel`)
+  ) |> 
+  knitr::kable()
+```
+
+## T1-DDS-7
+```{r}
+PROsort |> 
+  group_by(`Gruppe`) |> 
+  summarise(
+    "Score baseline" = mean(`DDS Score før`),
+    "Score ændring" = mean(`DDS Forskel`)
+  ) |> 
+  knitr::kable()
+```

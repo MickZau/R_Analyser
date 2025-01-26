@@ -26,6 +26,7 @@ Alle inkluderede deltagere har udført døgnblodtryksmålinger. Følgende målin
 #| fig-subcap:
 #| - "Systolisk tryk"
 #| - "Diastolisk tryk"
+#| - "MAP"
 #| layout-ncol: 3
 blodtryksort |> 
   rename("mmHg" = "24 Middel sys") |> 
@@ -47,11 +48,12 @@ blodtryksort |>
 ```
 
 ```{r}
-#| label: fig-24-bt-change
+#| label: fig-24-bt-box-change
 #| fig-cap: "Gennemsnitligt blodtryk over 24 timer"
 #| fig-subcap:
 #| - "Systolisk tryk"
 #| - "Diastolisk tryk"
+#| - "MAP"
 #| layout-ncol: 3
 blodtryksort |> 
   rename("mmHg" = "24 Middel sys") |> 
@@ -71,12 +73,12 @@ blodtryksort |>
 
 ### Målinger for vågen / søvn perioder. For overblikkets skyld anvendes kun MAP her:
 ```{r}
-#| label: fig-24-bt-change
+#| label: fig-dagnat-bt-change
 #| fig-cap: "Gennemsnitligt MAP for vågen/søvn"
 #| fig-subcap:
 #| - "MAP vågen periode"
 #| - "MAP søvn periode"
-#| layout-ncol: 3
+#| layout-ncol: 2
 blodtryksort |> 
   rename("mmHg" = "MAP vågen") |> 
   ggplot(aes(x = Visit, y = `mmHg`, colour = Gruppe, group = Deltager)) +
@@ -92,19 +94,21 @@ blodtryksort |>
 
 ### Antal af "Dippers" målt på fald i MAP om natten ift. dagen (defineret som minus 10%):
 ```{r}
-#| label: fig-24-bt-change
+#| label: fig-dippers-change
 #| fig-cap: "Samlet antal Dippers ved start og slut"
 #| fig-subcap:
 #| - "Dippers, baseline"
 #| - "Dippers, follow-up"
-#| layout-ncol: 3
+#| layout-ncol: 2
 blodtryksort |> 
   filter(`Visit`=="Baseline") |> 
   ggplot(aes(x = Gruppe, fill = as.character(Dipper))) +
-  geom_bar()
+  geom_bar(position = position_dodge()) +
+  ylim(0, 8)
 
 blodtryksort |> 
   filter(`Visit`=="Follow-up") |> 
   ggplot(aes(x = Gruppe, fill = as.character(Dipper))) +
-  geom_bar()
+  geom_bar(position = position_dodge()) +
+  ylim(0, 8)
 ```

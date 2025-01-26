@@ -1,0 +1,31 @@
+---
+title: "HST målinger"
+format: html
+execute:
+  echo: false
+  warning: false
+  message: false
+---
+
+```{r setup}
+library(tidyverse)
+library(readxl)
+HST <- read_excel("L:/LovbeskyttetMapper/AID projekt - Collab grant/WP2+3 (AIDBeyond)/AID-BEYOND Trial Master File/16) Data analyser/Analyseskema samlet NY.xlsx", 
+    sheet = "HST")
+HSTsort <- HST |> 
+  filter(
+    `Færdig?`=="Ja",
+    `HSTkvalgod`=="Ja")
+```
+
+```{r}
+HSTsort |> 
+  group_by(`Gruppe`) |> 
+  summarise(
+    "Efficiency baseline" = mean(`HST efficiency før`),
+    "Efficency ændring" = mean(`HST efficiency ændring`)
+  ) |> 
+  knitr::kable()
+```
+
+
