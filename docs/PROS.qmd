@@ -29,9 +29,6 @@ PROsort |>
   knitr::kable()
 ```
 
-#### Delkonklusion:
-
-
 ## WHO-5:
 Skemaet måler trivsel ud fra 5 forskellige spørgsmål om hvordan deltageren har haft det **de sidste 2 uger**. Hvert spørgsmål scores mellem 0 og 5 hvor 5 er bedst. Den samlede score udregnes ved at lægge de 5 værdier sammen og gange dem op med 4, hvormed der scores mellem 0 og 100. En samlet score over 50 er normalt, alt under peger på forskellige grader af mistrivsel. Resultatet ses nedenfor:
 ```{r}
@@ -43,8 +40,6 @@ PROsort |>
   ) |> 
   knitr::kable()
 ```
-
-#### Delkonklusion:
 
 ## EQ-5D-5L:
 Skemaet måler på generel sundhed ud fra 5 "dimension": Mobilitet, personlig pleje, sædvanlige aktiviteter, smerter og angst/depression. Alle spørgsmålene retter sig mod hvordan deltageren har det **i dag** og hver kategori måles mellem 1 og 5, hvor **5 er værst**. Det er lidt usikkert hvordan scoren skal tolkes da det lader til at blive målt ud fra en index værdi der er indhentet fra andre publikationer. For nu udregnes værdien som en sum af de enkelte kategorier. Endvidere bliver deltagerne bedt om at gradere hvor godt de har det ud fra en 0-100 VAS skala, hvor 100 er bedst. Værdierne begge ses nedenfor:
@@ -72,10 +67,8 @@ PROsort |>
   knitr::kable()
 ```
 
-#### Delkonklusion:
-
-
-## DEPSR
+## DEPSR:
+Skemaet måler på spisevaner hos folk med diabetes. Der er 16 spørgsmål der hver måles mellem 0 og 5. Der udregnes en samlet score ved at finde gennemsnittet af værdierne og gange denne med 16, således fås en score mellem 0 og 80 hvor 0 er bedst. En værdi over 20 indikerer et problem med spisevaner. Værdier nedenfor:
 ```{r}
 PROsort |> 
   group_by(`Gruppe`) |> 
@@ -86,7 +79,8 @@ PROsort |>
   knitr::kable()
 ```
 
-## T1-DDS-7
+## T1-DDS-7:
+Skemaet vurderer deltagerens grad af diabetes distress. Der er 7 spørgsmål der hver kan give mellem 1 og 6 point, hvor 1 er bedst. Den samlede DDS værdi udregnes som et gennemsnit af værdierne. En værdi under 2 er normal, mellem 2-2.9 indikerer moderat distress og over 3 indikerer høj distress. Værdier nedenfor:
 ```{r}
 PROsort |> 
   group_by(`Gruppe`) |> 

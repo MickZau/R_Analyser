@@ -12,6 +12,7 @@ library(tidyverse)
 library(readxl)
 library(kableExtra)
 CANTAB <- read_excel("L:/LovbeskyttetMapper/AID projekt - Collab grant/WP2+3 (AIDBeyond)/AID-BEYOND Trial Master File/16) Data analyser/CANTAB_endelig.xlsx")
+  #filter(`Participant`=="V011")
 ```
 
 ```{r}
@@ -21,7 +22,9 @@ RVP_screen <- CANTAB |>
     Færdig == "Ja",
     `Visit Identifier` == "Screen"
     ) |>
-  group_by(`Gruppe`) |> 
+  group_by(
+    `Gruppe`
+    ) |> 
   rename(
     "RVP Response latency (ms)" = RVPML,
     "RVP Response SD" = RVPLSD,
@@ -191,10 +194,10 @@ SST_followup <- CANTAB |>
 ## Beskrivelse:
 
 CANTAB undersøgelsen udføres for at teste kognition hos deltagerne. Der testes for: 
-1.Sustained attention (evnen til at holde fokus i lang tid ad gangen) med Rapid Visual Information Processing undersøgelsen (RVP). 
-2.Kort-tids visuel hukommelse med Delayed Matching to Sample (DMS) undersøgelsen. 
-3.Arbejdshukommelse og planlægningsevne med Spatial Working Memory (SWM) undersøgelsen. 
-4.Reaktionsevne og impulskontrol med Stop Signal Task (SST) undersøgelsen.
+1. Sustained attention (evnen til at holde fokus i lang tid ad gangen) med Rapid Visual Information Processing undersøgelsen (RVP). 
+2. Kort-tids visuel hukommelse med Delayed Matching to Sample (DMS) undersøgelsen. 
+3. Arbejdshukommelse og planlægningsevne med Spatial Working Memory (SWM) undersøgelsen. 
+4. Reaktionsevne og impulskontrol med Stop Signal Task (SST) undersøgelsen.
 
 Det kan være noget abstrakt at fortolke resultaterne af undersøgelserne der både inderholder konkrete, målbare data, udregnede composite data og kvalitetsdata. Det er forskelligt for hver data om en høj eller lav værdi er positivt. Nedenfor følger en nedkogt oversigt over resultater for både screen og follow-up, baseret på udvalgte værdier (ud af de 83 værdier der genereres).
 

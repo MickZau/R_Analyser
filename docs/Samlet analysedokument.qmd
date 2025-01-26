@@ -4,9 +4,28 @@ author: "MZS"
 format: html
 ---
 
+```{r setup}
+#| include: false
+library(tidyverse)
+
+#Demografi tabel
+
+```
+
+
 # Overordnet status:
-Aktuelt 50 inkluderet med 34 SDCC og 16 SDCA.
+Aktuelt 50 inkluderede med 34 SDCC og 16 SDCA.
 Af disse forelægger analyser for xx deltagere der er afsluttet per protokol, heraf xx AID brugere og xx kontroller.
 
 ## Demografi:
 Oversigtstabel over demografi ved inklusion og afslutning:
+
+```{r}
+basedemoimport |> 
+  mutate(
+    Gender = count(Gender),
+    Ethnicity = count(Ethnicity)
+  )
+```
+
+

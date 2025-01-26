@@ -22,10 +22,31 @@ HSTsort <- HST |>
 HSTsort |> 
   group_by(`Gruppe`) |> 
   summarise(
+    "Total sleep time før (min)" = mean(`HST TST før`),
+    "Total sleep time ændring (min)" = mean(`HST TST ændring`),
+    "n opvågninger baseline" = mean(`Wake # før`),
+    "n opvågninger ændring" = mean(`Wake # ændring`),
     "Efficiency baseline" = mean(`HST efficiency før`),
     "Efficency ændring" = mean(`HST efficiency ændring`)
   ) |> 
   knitr::kable()
 ```
+
+```{r}
+HSTsort |> 
+  group_by(`Gruppe`) |> 
+  summarise(
+    "N1 søvn baseline (min)" = mean(`N1 søvn før`),
+    "N2 søvn baseline (min)" = mean(`N2 søvn før`),
+    "N3 søvn baseline (min)" = mean(`N3 søvn før`),
+    "REM søvn baseline (min)" = mean(`REM søvn før`),
+    "N1 søvn ændring (min)" = mean(`N1 søvn ændring`),
+    "N2 søvn ændring (min)" = mean(`N2 søvn ændring`),
+    "N3 søvn ændring (min)" = mean(`N3 søvn ændring`),
+    "REM søvn ændring (min)" = mean(`REM søvn ændring`)
+  ) |> 
+  knitr::kable()
+```
+
 
 

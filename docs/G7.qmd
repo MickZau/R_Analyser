@@ -1,0 +1,151 @@
+---
+title: "G7 data"
+format: html
+execute:
+  echo: false
+  warning: false
+  message: false
+---
+
+```{r}
+library(tidyverse)
+
+#Usual care follow-up analyser
+controlbaseline <- list.files(
+  path = "L:/LovbeskyttetMapper/AID projekt - Collab grant/WP2+3 (AIDBeyond)/AID-BEYOND Trial Master File/12) Uploads and raw data/Voksen/Project Dexcom G7/Control/Baseline/CSV/",
+  pattern = "\\.csv$",
+  full.names = T
+  ) |>
+  map_df(~ read_csv(., col_types = cols(.default = "c")))
+
+#AID baseline analyser
+aidbaseline <- list.files(
+  path = "L:/LovbeskyttetMapper/AID projekt - Collab grant/WP2+3 (AIDBeyond)/AID-BEYOND Trial Master File/12) Uploads and raw data/Voksen/Project Dexcom G7/AID/Baseline/CSV/",
+  pattern = "\\.csv$",
+  full.names = T
+  ) |>
+  map_df(~ read_csv(., col_types = cols(.default = "c")))
+
+#Usual care follow-up analyser
+controlfollowup <- list.files(
+  path = "L:/LovbeskyttetMapper/AID projekt - Collab grant/WP2+3 (AIDBeyond)/AID-BEYOND Trial Master File/12) Uploads and raw data/Voksen/Project Dexcom G7/Control/Follow-up/CSV/",
+  pattern = "\\.csv$",
+  full.names = T
+  ) |>
+  map_df(~ read_csv(., col_types = cols(.default = "c")))
+
+#AID follow-up analyser
+aidfollowup <- list.files(
+  path = "L:/LovbeskyttetMapper/AID projekt - Collab grant/WP2+3 (AIDBeyond)/AID-BEYOND Trial Master File/12) Uploads and raw data/Voksen/Project Dexcom G7/AID/Follow-up/CSV/",
+  pattern = "\\.csv$",
+  full.names = T
+  ) |>
+  map_df(~ read_csv(., col_types = cols(.default = "c")))
+```
+
+```{r}
+#Forsimplede datasæt
+controlbaselinesimple <- controlbaseline |>
+  select(`Timestamp (YYYY-MM-DDThh:mm:ss)`, `Glucose Value (mmol/L)`) |>
+  rename(
+    Tid = `Timestamp (YYYY-MM-DDThh:mm:ss)`,
+    Glucose = `Glucose Value (mmol/L)`
+    ) |>
+   filter(Glucose <= 20 | Glucose >= 0) |> 
+    mutate(
+    SubTid = str_replace_all(Tid, "-", "/"),
+    SubTid2 = str_replace_all(SubTid, "T", " "),
+    endeligtid = hour(SubTid2),
+    endeligglucose = as.numeric(Glucose)
+    ) |>
+  select(endeligtid,Glucose, endeligglucose)
+
+aidbaselinesimple <- aidbaseline |>
+  select(`Timestamp (YYYY-MM-DDThh:mm:ss)`, `Glucose Value (mmol/L)`) |>
+  rename(
+    Tid = `Timestamp (YYYY-MM-DDThh:mm:ss)`,
+    Glucose = `Glucose Value (mmol/L)`
+    ) |>
+   filter(Glucose <= 20 | Glucose >= 0) |> 
+    mutate(
+    SubTid = str_replace_all(Tid, "-", "/"),
+    SubTid2 = str_replace_all(SubTid, "T", " "),
+    endeligtid = hour(SubTid2),
+    endeligglucose = as.numeric(Glucose)
+    ) |>
+  select(endeligtid,Glucose, endeligglucose)
+
+controlfollowupsimple <- controlfollowup |>
+  select(`Timestamp (YYYY-MM-DDThh:mm:ss)`, `Glucose Value (mmol/L)`) |>
+  rename(
+    Tid = `Timestamp (YYYY-MM-DDThh:mm:ss)`,
+    Glucose = `Glucose Value (mmol/L)`
+    ) |>
+   filter(Glucose <= 20 | Glucose >= 0) |> 
+    mutate(
+    SubTid = str_replace_all(Tid, "-", "/"),
+    SubTid2 = str_replace_all(SubTid, "T", " "),
+    endeligtid = hour(SubTid2),
+    endeligglucose = as.numeric(Glucose)
+    ) |>
+  select(endeligtid,Glucose, endeligglucose)
+
+aidfollowupsimple <- aidfollowup |>
+  select(`Timestamp (YYYY-MM-DDThh:mm:ss)`, `Glucose Value (mmol/L)`) |>
+  rename(
+    Tid = `Timestamp (YYYY-MM-DDThh:mm:ss)`,
+    Glucose = `Glucose Value (mmol/L)`
+    ) |>
+   filter(Glucose <= 20 | Glucose >= 0) |> 
+    mutate(
+    SubTid = str_replace_all(Tid, "-", "/"),
+    SubTid2 = str_replace_all(SubTid, "T", " "),
+    endeligtid = hour(SubTid2),
+    endeligglucose = as.numeric(Glucose)
+    ) |>
+  select(endeligtid,Glucose, endeligglucose)
+```
+
+## Baseline målinger:
+```{r}
+#| label: fig-g7-baseline
+#| fig-subcap:
+#| - "Kontrolgruppe"
+#| - "AID"
+#| layout-ncol: 2
+ggplot(controlbaselinesimple, aes(x = endeligtid, y = endeligglucose)) +
+  geom_point(size = 0.5) +
+  geom_hline(yintercept = 3.9) +
+  geom_hline(yintercept = 10) +
+  geom_smooth() +
+  ylim(2,22)
+
+ggplot(aidbaselinesimple, aes(x = endeligtid, y = endeligglucose)) +
+  geom_point(size = 0.5) +
+  geom_hline(yintercept = 3.9) +
+  geom_hline(yintercept = 10) +
+  geom_smooth() +
+  ylim(2,22)
+```
+
+## Follow-up målinger:
+```{r}
+#| label: fig-g7-followup
+#| fig-subcap:
+#| - "Kontrolgruppe"
+#| - "AID"
+#| layout-ncol: 2
+ggplot(controlfollowupsimple, aes(x = endeligtid, y = endeligglucose)) +
+  geom_point(size = 0.5) +
+  geom_hline(yintercept = 3.9) +
+  geom_hline(yintercept = 10) +
+  geom_smooth() +
+  ylim(2,22)
+
+ggplot(aidfollowupsimple, aes(x = endeligtid, y = endeligglucose)) +
+  geom_point(size = 0.5) +
+  geom_hline(yintercept = 3.9) +
+  geom_hline(yintercept = 10) +
+  geom_smooth() +
+  ylim(2,22)
+```
