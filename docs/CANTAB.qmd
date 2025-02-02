@@ -30,7 +30,8 @@ CANTAB |>
 RVP_screen <- CANTAB |>
   filter(
     Færdig == "Ja",
-    `Visit Identifier` == "Screen"
+    `Visit Identifier` == "Screen",
+    `Participant` != "V008"
     ) |>
   group_by(
     `Gruppe`,
@@ -54,25 +55,50 @@ RVP_screen <- CANTAB |>
 RVP_followup <- CANTAB |>
   filter(
     Færdig == "Ja",
-    `Visit Identifier` == "Afslut"
+    `Visit Identifier` == "Afslut",
+    `Participant` != "V008"
     ) |>
   group_by(
     `Gruppe`,
     `Level of education`
     ) |>  
   rename(
-    "RVP Response latency (ms)" = RVPML,
-    "RVP Response SD" = RVPLSD,
-    "RVP Total Hits" = RVPTH,
-    "RVP Total Misses" = RVPTM,
-    "RVP Total False Alarms" = RVPTFA,
+    "RVP Response latency (ms)" = RVPMLdelta,
+    "RVP Response SD" = RVPLSDdelta,
+    "RVP Total Hits" = RVPTHdelta,
+    "RVP Total Misses" = RVPTMdelta,
+    "RVP Total False Alarms" = RVPTFAdelta,
   ) |> 
   summarise(
-    "RVP Total Hits" = mean(`RVP Total Hits`),
-    "RVP Total Misses" = mean(`RVP Total Misses`),
-    "RVP Total False Alarms" = mean(`RVP Total False Alarms`),
-    "RVP Response latency (ms)" = mean(`RVP Response latency (ms)`),
-    "RVP Response SD" = mean(`RVP Response SD`)
+    "RVP Total Hits" = round(mean(`RVP Total Hits`),2),
+    "RVP Total Misses" = round(mean(`RVP Total Misses`),2),
+    "RVP Total False Alarms" = round(mean(`RVP Total False Alarms`),2),
+    "RVP Response latency (ms)" = round(mean(`RVP Response latency (ms)`),2),
+    "RVP Response SD" = round(mean(`RVP Response SD`),2)
+  )
+
+RVP_followupshort <- CANTAB |>
+  filter(
+    Færdig == "Ja",
+    `Visit Identifier` == "Afslut",
+    `Participant` != "V008"
+    ) |>
+  group_by(
+    `Gruppe`
+    ) |>  
+  rename(
+    "RVP Response latency (ms)" = RVPMLdelta,
+    "RVP Response SD" = RVPLSDdelta,
+    "RVP Total Hits" = RVPTHdelta,
+    "RVP Total Misses" = RVPTMdelta,
+    "RVP Total False Alarms" = RVPTFAdelta,
+  ) |> 
+  summarise(
+    "RVP Total Hits" = round(mean(`RVP Total Hits`),2),
+    "RVP Total Misses" = round(mean(`RVP Total Misses`),2),
+    "RVP Total False Alarms" = round(mean(`RVP Total False Alarms`),2),
+    "RVP Response latency (ms)" = round(mean(`RVP Response latency (ms)`),2),
+    "RVP Response SD" = round(mean(`RVP Response SD`),2)
   )
 
 #Data for DMS undersøgelse
@@ -95,13 +121,13 @@ DMS_screen <- CANTAB |>
     "DMS correct choice latency SD (all)" = DMSLADSD
   ) |> 
   summarise(
-    "DMS number of correct choices (all)" = mean(`DMS number of correct choices (all)`),
-    "DMS % correct choices (0 sec)" = mean(`DMS % correct choices (0 sec)`),
-    "DMS % correct choices (4 sec)" = mean(`DMS % correct choices (4 sec)`),
-    "DMS % correct choices (12 sec)" = mean(`DMS % correct choices (12 sec)`),
-    "DMS mean number of choices" = mean(`DMS mean number of choices`),
-    "DMS correct choice latency (all)" = mean(`DMS correct choice latency (all)`),
-    "DMS correct choice latency SD (all)" = mean(`DMS correct choice latency SD (all)`)
+    "DMS number of correct choices (all)" = round(mean(`DMS number of correct choices (all)`),2),
+    "DMS % correct choices (0 sec)" = round(mean(`DMS % correct choices (0 sec)`),2),
+    "DMS % correct choices (4 sec)" = round(mean(`DMS % correct choices (4 sec)`),2),
+    "DMS % correct choices (12 sec)" = round(mean(`DMS % correct choices (12 sec)`),2),
+    "DMS mean number of choices" = round(mean(`DMS mean number of choices`),2),
+    "DMS correct choice latency (all)" = round(mean(`DMS correct choice latency (all)`),2),
+    "DMS correct choice latency SD (all)" = round(mean(`DMS correct choice latency SD (all)`),2)
   )
 
 DMS_followup <- CANTAB |>
@@ -114,22 +140,49 @@ DMS_followup <- CANTAB |>
     `Level of education`
     ) |>  
   rename(
-    "DMS number of correct choices (all)" = DMSTC,
-    "DMS % correct choices (0 sec)" = DMSPC0,
-    "DMS % correct choices (4 sec)" = DMSPC4,
-    "DMS % correct choices (12 sec)" = DMSPC12,
-    "DMS mean number of choices" = DMSCC,
-    "DMS correct choice latency (all)" = DMSMLAD,
-    "DMS correct choice latency SD (all)" = DMSLADSD
+    "DMS number of correct choices (all)" = DMSTCdelta,
+    "DMS % correct choices (0 sec)" = DMSPC0delta,
+    "DMS % correct choices (4 sec)" = DMSPC4delta,
+    "DMS % correct choices (12 sec)" = DMSPC12delta,
+    "DMS mean number of choices" = DMSCCdelta,
+    "DMS correct choice latency (all)" = DMSMLADdelta,
+    "DMS correct choice latency SD (all)" = DMSLADSDdelta
   ) |> 
   summarise(
-    "DMS number of correct choices (all)" = mean(`DMS number of correct choices (all)`),
-    "DMS % correct choices (0 sec)" = mean(`DMS % correct choices (0 sec)`),
-    "DMS % correct choices (4 sec)" = mean(`DMS % correct choices (4 sec)`),
-    "DMS % correct choices (12 sec)" = mean(`DMS % correct choices (12 sec)`),
-    "DMS mean number of choices" = mean(`DMS mean number of choices`),
-    "DMS correct choice latency (all)" = mean(`DMS correct choice latency (all)`),
-    "DMS correct choice latency SD (all)" = mean(`DMS correct choice latency SD (all)`)
+    "DMS number of correct choices (all)" = round(mean(`DMS number of correct choices (all)`),2),
+    "DMS % correct choices (0 sec)" = round(mean(`DMS % correct choices (0 sec)`),2),
+    "DMS % correct choices (4 sec)" = round(mean(`DMS % correct choices (4 sec)`),2),
+    "DMS % correct choices (12 sec)" = round(mean(`DMS % correct choices (12 sec)`),2),
+    "DMS mean number of choices" = round(mean(`DMS mean number of choices`),2),
+    "DMS correct choice latency (all)" = round(mean(`DMS correct choice latency (all)`),2),
+    "DMS correct choice latency SD (all)" = round(mean(`DMS correct choice latency SD (all)`),2)
+  )
+
+DMS_followupshort <- CANTAB |>
+  filter(
+    Færdig == "Ja",
+    `Visit Identifier` == "Afslut"
+    ) |>
+  group_by(
+    `Gruppe`
+    ) |>  
+  rename(
+    "DMS number of correct choices (all)" = DMSTCdelta,
+    "DMS % correct choices (0 sec)" = DMSPC0delta,
+    "DMS % correct choices (4 sec)" = DMSPC4delta,
+    "DMS % correct choices (12 sec)" = DMSPC12delta,
+    "DMS mean number of choices" = DMSCCdelta,
+    "DMS correct choice latency (all)" = DMSMLADdelta,
+    "DMS correct choice latency SD (all)" = DMSLADSDdelta
+  ) |> 
+  summarise(
+    "DMS number of correct choices (all)" = round(mean(`DMS number of correct choices (all)`),2),
+    "DMS % correct choices (0 sec)" = round(mean(`DMS % correct choices (0 sec)`),2),
+    "DMS % correct choices (4 sec)" = round(mean(`DMS % correct choices (4 sec)`),2),
+    "DMS % correct choices (12 sec)" = round(mean(`DMS % correct choices (12 sec)`),2),
+    "DMS mean number of choices" = round(mean(`DMS mean number of choices`),2),
+    "DMS correct choice latency (all)" = round(mean(`DMS correct choice latency (all)`),2),
+    "DMS correct choice latency SD (all)" = round(mean(`DMS correct choice latency SD (all)`),2)
   )
 
 #Data for SWM undersøgelse
@@ -167,16 +220,38 @@ SWM_followup <- CANTAB |>
     `Level of education`
     ) |> 
   rename(
-    "SWM Total Errors (all)" = SWMTE468,
-    "SWM Between Errors (all)" = SWMBE468,
-    "SWM Within Errors (all)" = SWMWE468,
-    "SWM strategy (6-12 boxes)" = SWMSX
+    "SWM Total Errors (all)" = SWMTE468delta,
+    "SWM Between Errors (all)" = SWMBE468delta,
+    "SWM Within Errors (all)" = SWMWE468delta,
+    "SWM strategy (6-12 boxes)" = SWMSXdelta
     ) |> 
   summarise(
-    "SWM Total Errors (all)" = mean(`SWM Total Errors (all)`),
-    "SWM Between Errors (all)" = mean(`SWM Between Errors (all)`),
-    "SWM Within Errors (all)" = mean(`SWM Within Errors (all)`),
-    "SWM strategy (6-12 boxes)" = mean(`SWM strategy (6-12 boxes)`)
+    "SWM Total Errors (all)" = round(mean(`SWM Total Errors (all)`),2),
+    "SWM Between Errors (all)" = round(mean(`SWM Between Errors (all)`),2),
+    "SWM Within Errors (all)" = round(mean(`SWM Within Errors (all)`),2),
+    "SWM strategy (6-12 boxes)" = round(mean(`SWM strategy (6-12 boxes)`),2)
+  )
+
+SWM_followupshort <- CANTAB |>
+  filter(
+    Færdig == "Ja",
+    `Visit Identifier` == "Afslut",
+    `Participant` != "V009"
+    ) |>
+  group_by(
+    `Gruppe`
+    ) |> 
+  rename(
+    "SWM Total Errors (all)" = SWMTE468delta,
+    "SWM Between Errors (all)" = SWMBE468delta,
+    "SWM Within Errors (all)" = SWMWE468delta,
+    "SWM strategy (6-12 boxes)" = SWMSXdelta
+    ) |> 
+  summarise(
+    "SWM Total Errors (all)" = round(mean(`SWM Total Errors (all)`),2),
+    "SWM Between Errors (all)" = round(mean(`SWM Between Errors (all)`),2),
+    "SWM Within Errors (all)" = round(mean(`SWM Within Errors (all)`),2),
+    "SWM strategy (6-12 boxes)" = round(mean(`SWM strategy (6-12 boxes)`),2)
   )
 
 #Data for SST undersøgelse
@@ -212,16 +287,37 @@ SST_followup <- CANTAB |>
     `Level of education`
     ) |>  
   rename(
-    "SST Stop Reaction Time (ms)" = SSTSSRT,
-    "SST Median Go Reaction Time (ms)" = SSTMRTG,
-    "SST Stop Errors" = SSTDES,
-    "SST Go Errors" = SSTDEG
+    "SST Stop Reaction Time (ms)" = SSTSSRTdelta,
+    "SST Median Go Reaction Time (ms)" = SSTMRTGdelta,
+    "SST Stop Errors" = SSTDESdelta,
+    "SST Go Errors" = SSTDEGdelta
     ) |> 
   summarise(
-    "SST Stop Reaction Time (ms)" = mean(`SST Stop Reaction Time (ms)`),
-    "SST Median Go Reaction Time (ms)" = mean(`SST Median Go Reaction Time (ms)`),
-    "SST Stop Errors" = mean(`SST Stop Errors`),
-    "SST Go Errors" = mean(`SST Go Errors`)
+    "SST Stop Reaction Time (ms)" = round(mean(`SST Stop Reaction Time (ms)`),2),
+    "SST Median Go Reaction Time (ms)" = round(mean(`SST Median Go Reaction Time (ms)`),2),
+    "SST Stop Errors" = round(mean(`SST Stop Errors`),2),
+    "SST Go Errors" = round(mean(`SST Go Errors`),2)
+  )
+
+SST_followupshort <- CANTAB |>
+  filter(
+    Færdig == "Ja",
+    `Visit Identifier` == "Afslut"
+    ) |>
+  group_by(
+    `Gruppe`
+    ) |>  
+  rename(
+    "SST Stop Reaction Time (ms)" = SSTSSRTdelta,
+    "SST Median Go Reaction Time (ms)" = SSTMRTGdelta,
+    "SST Stop Errors" = SSTDESdelta,
+    "SST Go Errors" = SSTDEGdelta
+    ) |> 
+  summarise(
+    "SST Stop Reaction Time (ms)" = round(mean(`SST Stop Reaction Time (ms)`),2),
+    "SST Median Go Reaction Time (ms)" = round(mean(`SST Median Go Reaction Time (ms)`),2),
+    "SST Stop Errors" = round(mean(`SST Stop Errors`),2),
+    "SST Go Errors" = round(mean(`SST Go Errors`),2)
   )
 ```
 
@@ -236,6 +332,7 @@ CANTAB undersøgelsen udføres for at teste kognition hos deltagerne. Der testes
 Det kan være noget abstrakt at fortolke resultaterne af undersøgelserne der både inderholder konkrete, målbare data, udregnede composite data og kvalitetsdata. Det er forskelligt for hver data om en høj eller lav værdi er positivt. Nedenfor følger en nedkogt oversigt over resultater for både screen og follow-up, baseret på udvalgte værdier (ud af de 83 værdier der genereres).
 
 ### Følgende resultater er for Rapid Visual Information Processing undersøgelsen ved hhv. screen og follow-up:
+Obs: 1 deltager i kontrolgruppen udelukket grundet tekniske problemer med undersøgelsen.
 
 ```{r}
 #| labe: tbl-rvp-baseline
@@ -247,8 +344,17 @@ RVP_screen |>
 ```
 
 ```{r}
-#| labe: tbl-rvp-followup
-#| tbl-cap: "Under: RVP værdier ved follow-up for hver gruppe"
+#| labl: tbl-rvp-followupshort
+#| tbl-cap: "Under: Ændringer i RVP værdier ved follow-up for hver gruppe"
+RVP_followupshort |> 
+  knitr::kable(
+    align = "cccccc"
+    )
+```
+
+```{r}
+#| labl: tbl-rvp-followup
+#| tbl-cap: "Under: Ændringer i RVP værdier ved follow-up for hver gruppe, sorteret efter uddannelsesniveau"
 RVP_followup |> 
   knitr::kable(
     align = "cccccc"
@@ -258,7 +364,7 @@ RVP_followup |>
 ### Følgende resultater er for Delayed Matching to Sampling undersøgelsen ved hhv. screen og follow-up:
 
 ```{r}
-#| labe: tbl-dms-baseline
+#| labl: tbl-dms-baseline
 #| tbl-cap: "Under: DMS værdier ved baseline for hver gruppe"
 DMS_screen |> 
   knitr::kable(
@@ -267,8 +373,17 @@ DMS_screen |>
 ```
 
 ```{r}
-#| labe: tbl-dms-followup
+#| labl: tbl-dms-followupshort
 #| tbl-cap: "Under: DMS værdier ved follow-up for hver gruppe"
+DMS_followupshort |> 
+  knitr::kable(
+    align = "cccccc"
+    )
+```
+
+```{r}
+#| labl: tbl-dms-followup
+#| tbl-cap: "Under: DMS værdier ved follow-up for hver gruppe, sorteret efter uddannelsesnivaeu"
 DMS_followup |> 
   knitr::kable(
     align = "cccccc"
@@ -278,7 +393,7 @@ DMS_followup |>
 ### Følgende resultater er for Spatial Working Memory undersøgelsen ved hhv. screen og follow-up:
 
 ```{r}
-#| labe: tbl-swm-baseline
+#| labl: tbl-swm-baseline
 #| tbl-cap: "Under: SWM værdier ved baseline for hver gruppe"
 SWM_screen |> 
   knitr::kable(
@@ -287,8 +402,17 @@ SWM_screen |>
 ```
 
 ```{r}
-#| labe: tbl-swm-followup
+#| labl: tbl-swm-followupshort
 #| tbl-cap: "Under: SWM værdier ved follow-up for hver gruppe"
+SWM_followupshort |> 
+  knitr::kable(
+    align = "cccccc"
+    )
+```
+
+```{r}
+#| labl: tbl-swm-followup
+#| tbl-cap: "Under: SWM værdier ved follow-up for hver gruppe, sorteret efter uddannelsesniveau"
 SWM_followup |> 
   knitr::kable(
     align = "cccccc"
@@ -298,7 +422,7 @@ SWM_followup |>
 ### Følgende resultater er for Stop Signal Task undersøgelsen ved hhv. screen og follow-up:
 
 ```{r}
-#| label: tbl-sst-baseline
+#| labl: tbl-sst-baseline
 #| tbl-cap: "Under: SST værdier ved baseline for hver gruppe"
 SST_screen |> 
   knitr::kable(
@@ -307,8 +431,17 @@ SST_screen |>
 ```
 
 ```{r}
-#| label: tbl-sst-followup
+#| labl: tbl-sst-followupshort
 #| tbl-cap: "Under: SST værdier ved follow-up for hver gruppe"
+SST_followupshort |> 
+  knitr::kable(
+    align = "cccccc"
+    )
+```
+
+```{r}
+#| labl: tbl-sst-followup
+#| tbl-cap: "Under: SST værdier ved follow-up for hver gruppe, sorteret efter uddannelsesniveau"
 SST_followup |> 
   knitr::kable(
     align = "cccccc"
