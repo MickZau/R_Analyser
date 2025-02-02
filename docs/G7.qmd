@@ -128,10 +128,14 @@ aidfollowupsimple <- aidfollowup |>
   select(endeligtid,Glucose, endeligglucose)
 ```
 ## Antal deltagere:
-Control: **7**.
-AID: **8**
+```{r}
+g7sort |> 
+count(`Gruppe`) |> 
+  knitr::kable()
+```
 
-To deltagere i kontrol gruppe udelukket grundet G7 målinger ikke er trukket fra G7 så kan ikke få data til at fungere med R script. Finder en løsning senere.
+
+To deltagere i kontrol gruppe udelukket grundet G7 målinger ikke er trukket fra clarity, så kan ikke få data til at fungere med R script. Finder en løsning senere.
 
 ## G7 værdier ved baseline og followup:
 ```{r}
