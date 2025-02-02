@@ -9,6 +9,7 @@ execute:
 
 ```{r}
 library(tidyverse)
+library(readxl)
 
 #Usual care follow-up analyser
 controlbaseline <- list.files(
@@ -41,6 +42,11 @@ aidfollowup <- list.files(
   full.names = T
   ) |>
   map_df(~ read_csv(., col_types = cols(.default = "c")))
+
+g7 <- read_excel("L:/LovbeskyttetMapper/AID projekt - Collab grant/WP2+3 (AIDBeyond)/AID-BEYOND Trial Master File/16) Data analyser/Analyseskema samlet NY.xlsx", 
+    sheet = "G7")
+g7sort <- g7 |> 
+  filter(`Færdig`=="Ja")
 ```
 
 ```{r}
@@ -122,10 +128,26 @@ aidfollowupsimple <- aidfollowup |>
   select(endeligtid,Glucose, endeligglucose)
 ```
 ## Antal deltagere:
-Control: 7
-AID: 8
+Control: **7**.
+AID: **8**
 
 To deltagere i kontrol gruppe udelukket grundet G7 målinger ikke er trukket fra G7 så kan ikke få data til at fungere med R script. Finder en løsning senere.
+
+## G7 værdier ved baseline og followup:
+```{r}
+g7sort |> 
+  group_by(`Gruppe`,`Basetreat`) |> 
+  summarise(
+    "TIR baseline" = mean(TIR_før),
+    "TAR baseline" = mean(TAR_før),
+    "TBR baseline" = mean(TBR_før),
+    "TIR ændring" = mean(TIR_ændring),
+    "TAR ændring" = mean(TAR_ændring),
+    "TBR ændring" = mean(TBR_ændring)
+  ) |> 
+  knitr::kable()
+```
+
 
 ## Baseline målinger:
 ```{r}
