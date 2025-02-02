@@ -11,8 +11,18 @@ execute:
 library(tidyverse)
 library(readxl)
 library(kableExtra)
-CANTAB <- read_excel("L:/LovbeskyttetMapper/AID projekt - Collab grant/WP2+3 (AIDBeyond)/AID-BEYOND Trial Master File/16) Data analyser/CANTAB_endelig.xlsx")
-  #filter(`Participant`=="V011")
+CANTAB <- read_excel("L:/LovbeskyttetMapper/AID projekt - Collab grant/WP2+3 (AIDBeyond)/AID-BEYOND Trial Master File/16) Data analyser/CANTAB_endelig.xlsx") 
+  #filter(`Participant`=="V010")
+
+CANTAB |> 
+  filter(
+    Færdig == "Ja",
+    `Visit Identifier`== "Afslut") |> 
+  count(
+    `Gruppe`,
+    `Level of education`
+    ) |> 
+  knitr::kable()
 ```
 
 ```{r}
@@ -23,7 +33,8 @@ RVP_screen <- CANTAB |>
     `Visit Identifier` == "Screen"
     ) |>
   group_by(
-    `Gruppe`
+    `Gruppe`,
+    `Level of education`
     ) |> 
   rename(
     "RVP Response latency (ms)" = RVPML,
@@ -45,7 +56,10 @@ RVP_followup <- CANTAB |>
     Færdig == "Ja",
     `Visit Identifier` == "Afslut"
     ) |>
-  group_by(`Gruppe`) |> 
+  group_by(
+    `Gruppe`,
+    `Level of education`
+    ) |>  
   rename(
     "RVP Response latency (ms)" = RVPML,
     "RVP Response SD" = RVPLSD,
@@ -67,7 +81,10 @@ DMS_screen <- CANTAB |>
     Færdig == "Ja",
     `Visit Identifier` == "Screen"
     ) |>
-  group_by(`Gruppe`) |> 
+  group_by(
+    `Gruppe`,
+    `Level of education`
+    ) |>  
   rename(
     "DMS number of correct choices (all)" = DMSTC,
     "DMS % correct choices (0 sec)" = DMSPC0,
@@ -92,7 +109,10 @@ DMS_followup <- CANTAB |>
     Færdig == "Ja",
     `Visit Identifier` == "Afslut"
     ) |>
-  group_by(`Gruppe`) |> 
+  group_by(
+    `Gruppe`,
+    `Level of education`
+    ) |>  
   rename(
     "DMS number of correct choices (all)" = DMSTC,
     "DMS % correct choices (0 sec)" = DMSPC0,
@@ -116,9 +136,13 @@ DMS_followup <- CANTAB |>
 SWM_screen <- CANTAB |>
   filter(
     Færdig == "Ja",
-    `Visit Identifier` == "Screen"
+    `Visit Identifier` == "Screen",
+    `Participant` != "V009" 
     ) |>
-  group_by(`Gruppe`) |> 
+  group_by(
+    `Gruppe`,
+    `Level of education`
+    ) |>  
   rename(
     "SWM Total Errors (all)" = SWMTE468,
     "SWM Between Errors (all)" = SWMBE468,
@@ -135,9 +159,13 @@ SWM_screen <- CANTAB |>
 SWM_followup <- CANTAB |>
   filter(
     Færdig == "Ja",
-    `Visit Identifier` == "Afslut"
+    `Visit Identifier` == "Afslut",
+    `Participant` != "V009"
     ) |>
-  group_by(`Gruppe`) |> 
+  group_by(
+    `Gruppe`,
+    `Level of education`
+    ) |> 
   rename(
     "SWM Total Errors (all)" = SWMTE468,
     "SWM Between Errors (all)" = SWMBE468,
@@ -157,7 +185,10 @@ SST_screen <- CANTAB |>
     Færdig == "Ja",
     `Visit Identifier` == "Screen"
     ) |>
-  group_by(`Gruppe`) |> 
+  group_by(
+    `Gruppe`,
+    `Level of education`
+    ) |>  
   rename(
     "SST Stop Reaction Time (ms)" = SSTSSRT,
     "SST Median Go Reaction Time (ms)" = SSTMRTG,
@@ -176,7 +207,10 @@ SST_followup <- CANTAB |>
     Færdig == "Ja",
     `Visit Identifier` == "Afslut"
     ) |>
-  group_by(`Gruppe`) |> 
+  group_by(
+    `Gruppe`,
+    `Level of education`
+    ) |>  
   rename(
     "SST Stop Reaction Time (ms)" = SSTSSRT,
     "SST Median Go Reaction Time (ms)" = SSTMRTG,
