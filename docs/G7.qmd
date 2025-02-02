@@ -46,7 +46,13 @@ aidfollowup <- list.files(
 g7 <- read_excel("L:/LovbeskyttetMapper/AID projekt - Collab grant/WP2+3 (AIDBeyond)/AID-BEYOND Trial Master File/16) Data analyser/Analyseskema samlet NY.xlsx", 
     sheet = "G7")
 g7sort <- g7 |> 
-  filter(`Færdig`=="Ja")
+  filter(
+    `Færdig`=="Ja",
+    `Deltager`!=3,
+    `Deltager`!=6,
+    `Deltager`!=9,
+    `Deltager`!=12
+  )
 ```
 
 ```{r}
@@ -130,12 +136,13 @@ aidfollowupsimple <- aidfollowup |>
 ## Antal deltagere:
 ```{r}
 g7sort |> 
-count(`Gruppe`) |> 
+count(`Gruppe`, `Basetreat`) |> 
   knitr::kable()
 ```
 
 
 To deltagere i kontrol gruppe udelukket grundet G7 målinger ikke er trukket fra clarity, så kan ikke få data til at fungere med R script. Finder en løsning senere.
+Desuden er 4 deltagere (1 AID, 3 kontrol) udelukket grundet <70% sensor tid ved baseline eller/og follow-up. To af disse havde 65%.
 
 ## G7 værdier ved baseline og followup:
 ```{r}
@@ -151,9 +158,10 @@ g7sort |>
   ) |> 
   knitr::kable()
 ```
+## Døgnkurver:
+Nedenstående kurver viser G7 målt blodglucose på et gennemsnitligt tidspunkt på dagen, baseret på 10 dages måling for hver gruppe ved hhv. baseline og followup. Målinger er for samme deltagere hvor ovenstående TIR/TAR/TBR værdier er udregnede.
 
-
-## Baseline målinger:
+### Baseline målinger:
 ```{r}
 #| label: fig-g7-baseline
 #| fig-subcap:
@@ -179,7 +187,7 @@ ggplot(aidbaselinesimple, aes(x = endeligtid, y = endeligglucose)) +
   theme(text = element_text(size = 20))
 ```
 
-## Follow-up målinger:
+### Follow-up målinger:
 ```{r}
 #| label: fig-g7-followup
 #| fig-subcap:
