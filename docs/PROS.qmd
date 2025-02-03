@@ -13,7 +13,12 @@ library(readxl)
 PROS <- read_excel("L:/LovbeskyttetMapper/AID projekt - Collab grant/WP2+3 (AIDBeyond)/AID-BEYOND Trial Master File/16) Data analyser/Analyseskema samlet NY.xlsx", 
     sheet = "Pro skemaer", skip = 2)
 PROsort <- PROS |> 
-  filter(`Færdig`=="Ja")
+  filter(`Færdig`=="Ja"
+         )
+PROsort |> 
+  #filter(`Deltager`<8 | `Deltager`>8) |> 
+  count(`Gruppe`) |> 
+  knitr::kable()
 ```
 
 ## PSQI
@@ -24,10 +29,28 @@ PROsort |>
   filter(`Deltager`<8 | `Deltager`>8) |> 
   summarise(
     "Efficiency før" = mean(`PSQI Efficiency før`),
-    "Efficiency ændring" = mean(`PSQI Forskel`,na.rm = FALSE)
+    "Efficiency ændring" = mean(`PSQI Forskel`)
   ) |> 
   knitr::kable()
 ```
+
+```{r}
+#| layout-ncol: 2
+PROsort |>
+  filter(`Deltager`<8 | `Deltager`>8) |> 
+  ggplot(aes(x = `Gruppe`, y = `PSQI Efficiency før`))+
+  geom_boxplot(colour = "grey50")+
+  geom_jitter(width = 0.1, height = 0)+
+  ylim(0,100)
+
+PROsort |>
+  filter(`Deltager`<8 | `Deltager`>8) |> 
+  ggplot(aes(x = `Gruppe`, y = `PSQI Efficiency efter`))+
+  geom_boxplot(colour = "grey50")+
+  geom_jitter(width = 0.1, height = 0)+
+  ylim(0,100)
+```
+Obs: 1 deltager udelukket grundet fejlregistrering af søvntid (der gav ham en sleep efficiency på 4800%).
 
 ## WHO-5:
 Skemaet måler trivsel ud fra 5 forskellige spørgsmål om hvordan deltageren har haft det **de sidste 2 uger**. Hvert spørgsmål scores mellem 0 og 5 hvor 5 er bedst. Den samlede score udregnes ved at lægge de 5 værdier sammen og gange dem op med 4, hvormed der scores mellem 0 og 100. En samlet score over 50 er normalt, alt under peger på forskellige grader af mistrivsel. Resultatet ses nedenfor:
@@ -35,12 +58,26 @@ Skemaet måler trivsel ud fra 5 forskellige spørgsmål om hvordan deltageren ha
 PROsort |> 
   group_by(`Gruppe`) |> 
   summarise(
-    "WHO-5 baseline" = mean(`WHO5 Før`),
+    "WHO-5 baseline" = mean(as.numeric(`WHO5 Før`)),
     "WHO-5 ændring" = mean(`WHO5 Forskel`)
   ) |> 
   knitr::kable()
 ```
 
+```{r}
+#| layout-ncol: 2
+PROsort |>
+  ggplot(aes(x = `Gruppe`, y = `WHO5 Før`))+
+  geom_boxplot(colour = "grey50")+
+  geom_jitter(width = 0.1, height = 0)+
+  ylim(0,100)
+
+PROsort |>
+  ggplot(aes(x = `Gruppe`, y = `WHO5 Efter`))+
+  geom_boxplot(colour = "grey50")+
+  geom_jitter(width = 0.1, height = 0)+
+  ylim(0,100)
+```
 ## EQ-5D-5L:
 Skemaet måler på generel sundhed ud fra 5 "dimension": Mobilitet, personlig pleje, sædvanlige aktiviteter, smerter og angst/depression. Alle spørgsmålene retter sig mod hvordan deltageren har det **i dag** og hver kategori måles mellem 1 og 5, hvor **5 er værst**. Det er lidt usikkert hvordan scoren skal tolkes da det lader til at blive målt ud fra en index værdi der er indhentet fra andre publikationer. For nu udregnes værdien som en sum af de enkelte kategorier. Endvidere bliver deltagerne bedt om at gradere hvor godt de har det ud fra en 0-100 VAS skala, hvor 100 er bedst. Værdierne begge ses nedenfor:
 ```{r}
@@ -55,6 +92,35 @@ PROsort |>
   knitr::kable()
 ```
 
+```{r}
+#| layout-ncol: 2
+PROsort |>
+  ggplot(aes(x = `Gruppe`, y = `EQ Score før`))+
+  geom_boxplot(colour = "grey50")+
+  geom_jitter(width = 0.1, height = 0)+
+  ylim(0,25)
+
+PROsort |>
+  ggplot(aes(x = `Gruppe`, y = `EQ Score efter`))+
+  geom_boxplot(colour = "grey50")+
+  geom_jitter(width = 0.1, height = 0)+
+  ylim(0,25)
+```
+```{r}
+#| layout-ncol: 2
+PROsort |>
+  ggplot(aes(x = `Gruppe`, y = `EQ VAS før`))+
+  geom_boxplot(colour = "grey50")+
+  geom_jitter(width = 0.1, height = 0)+
+  ylim(0,100)
+
+PROsort |>
+  ggplot(aes(x = `Gruppe`, y = `EQ VAS efter`))+
+  geom_boxplot(colour = "grey50")+
+  geom_jitter(width = 0.1, height = 0)+
+  ylim(0,100)
+```
+
 ## HFS-II
 Skemaet måler på graden af frygt for hypoglykæmi. Der er 11 spørgsmål vedrørende adfærd for at undgå hypoglykæmi og bekymringer for dette. Der spørges specifikt til **den seneste måned**. Hvert spørgsmål kan give mellem 0 og 4 point hvor 4 er værst, den samlede HFS score er en sum af disse værdier og er derfor mellem 0 og 44. Der er ikke nogen umiddelbar cutoff værdi. De udregnede værdier ses nedenfor:
 ```{r}
@@ -65,6 +131,21 @@ PROsort |>
     "Score ændring" = mean(`HFS Forskel`)
   ) |> 
   knitr::kable()
+```
+
+```{r}
+#| layout-ncol: 2
+PROsort |>
+  ggplot(aes(x = `Gruppe`, y = `HFS Score før`))+
+  geom_boxplot(colour = "grey50")+
+  geom_jitter(width = 0.1, height = 0)+
+  ylim(0,44)
+
+PROsort |>
+  ggplot(aes(x = `Gruppe`, y = `HFS Score efter`))+
+  geom_boxplot(colour = "grey50")+
+  geom_jitter(width = 0.1, height = 0)+
+  ylim(0,44)
 ```
 
 ## DEPSR:
@@ -79,6 +160,21 @@ PROsort |>
   knitr::kable()
 ```
 
+```{r}
+#| layout-ncol: 2
+PROsort |>
+  ggplot(aes(x = `Gruppe`, y = `DEPSR Score før`))+
+  geom_jitter(width = 0.1, height = 0)+
+  geom_hline(yintercept = 20, colour = "red") +
+  ylim(0,80)
+
+PROsort |>
+  ggplot(aes(x = `Gruppe`, y = `DEPSR Score efter`))+
+  geom_jitter(width = 0.1, height = 0)+
+  geom_hline(yintercept = 20, colour = "red") +
+  ylim(0,80)
+```
+
 ## T1-DDS-7:
 Skemaet vurderer deltagerens grad af diabetes distress. Der er 7 spørgsmål der hver kan give mellem 1 og 6 point, hvor 1 er bedst. Den samlede DDS værdi udregnes som et gennemsnit af værdierne. En værdi under 2 er normal, mellem 2-2.9 indikerer moderat distress og over 3 indikerer høj distress. Værdier nedenfor:
 ```{r}
@@ -89,4 +185,21 @@ PROsort |>
     "Score ændring" = mean(`DDS Forskel`)
   ) |> 
   knitr::kable()
+```
+
+```{r}
+#| layout-ncol: 2
+PROsort |>
+  ggplot(aes(x = `Gruppe`, y = `DDS Score før`))+
+  geom_jitter(width = 0.1, height = 0)+
+  geom_hline(yintercept = 2, colour = "orange") +
+  geom_hline(yintercept = 3, colour = "red") +
+  ylim(0,7)
+
+PROsort |>
+  ggplot(aes(x = `Gruppe`, y = `DDS Score efter`))+
+  geom_jitter(width = 0.1, height = 0)+
+  geom_hline(yintercept = 2, colour = "orange") +
+  geom_hline(yintercept = 3, colour = "red") +
+  ylim(0,7)
 ```
