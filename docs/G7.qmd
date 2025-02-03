@@ -1,5 +1,5 @@
 ---
-title: "G7 data"
+title: "G7 data og HbA1c"
 format: html
 execute:
   echo: false
@@ -49,8 +49,6 @@ g7sort <- g7 |>
   filter(
     `Færdig`=="Ja",
     `Deltager`!=3,
-    `Deltager`!=6,
-    `Deltager`!=9,
     `Deltager`!=12
   )
 ```
@@ -72,7 +70,8 @@ controlbaselinesimple <- controlbaseline |>
     SubTid2 = str_replace_all(SubTid, "T", " "),
     endeligtid = hour(SubTid2),
     fiksglucose = str_replace_all(Glucose, "High", "22.5"),
-    endeligglucose = as.numeric(fiksglucose)
+    fiksglucose2 = str_replace_all(fiksglucose, "Low", "2.0"),
+    endeligglucose = as.numeric(fiksglucose2)
     ) |>
   select(Tid, endeligtid, Glucose, endeligglucose)
 
@@ -91,7 +90,8 @@ aidbaselinesimple <- aidbaseline |>
     SubTid2 = str_replace_all(SubTid, "T", " "),
     endeligtid = hour(SubTid2),
     fiksglucose = str_replace_all(Glucose, "High", "22.5"),
-    endeligglucose = as.numeric(fiksglucose)
+    fiksglucose2 = str_replace_all(fiksglucose, "Low", "2.0"),
+    endeligglucose = as.numeric(fiksglucose2)
     ) |>
   select(endeligtid, Glucose, endeligglucose)
 
@@ -110,7 +110,8 @@ controlfollowupsimple <- controlfollowup |>
     SubTid2 = str_replace_all(SubTid, "T", " "),
     endeligtid = hour(SubTid2),
     fiksglucose = str_replace_all(Glucose, "High", "22.5"),
-    endeligglucose = as.numeric(fiksglucose)
+    fiksglucose2 = str_replace_all(fiksglucose, "Low", "2.0"),
+    endeligglucose = as.numeric(fiksglucose2)
     ) |>
   select(endeligtid,Glucose, endeligglucose)
 
@@ -129,7 +130,8 @@ aidfollowupsimple <- aidfollowup |>
     SubTid2 = str_replace_all(SubTid, "T", " "),
     endeligtid = hour(SubTid2),
     fiksglucose = str_replace_all(Glucose, "High", "22.5"),
-    endeligglucose = as.numeric(fiksglucose)
+    fiksglucose2 = str_replace_all(fiksglucose, "Low", "2.0"),
+    endeligglucose = as.numeric(fiksglucose2)
     ) |>
   select(endeligtid,Glucose, endeligglucose)
 ```
@@ -142,19 +144,27 @@ count(`Gruppe`, `Basetreat`) |>
 
 
 To deltagere i kontrol gruppe udelukket grundet G7 målinger ikke er trukket fra clarity, så kan ikke få data til at fungere med R script. Finder en løsning senere.
-Desuden er 4 deltagere (1 AID, 3 kontrol) udelukket grundet <70% sensor tid ved baseline eller/og follow-up. To af disse havde 65%.
+Desuden er 2 deltagere i kontrolgruppen udelukket grundet <70% sensor tid ved baseline eller/og follow-up.
 
-## G7 værdier ved baseline og followup:
+## Glykæmiske parametre ved baseline og followup:
 ```{r}
 g7sort |> 
   group_by(`Gruppe`,`Basetreat`) |> 
   summarise(
-    "TIR baseline" = mean(TIR_før),
-    "TAR baseline" = mean(TAR_før),
-    "TBR baseline" = mean(TBR_før),
-    "TIR ændring" = mean(TIR_ændring),
-    "TAR ændring" = mean(TAR_ændring),
-    "TBR ændring" = mean(TBR_ændring)
+    "HbA1c baseline" = round(mean(A1c_før),0),
+    "TIR baseline" = round(mean(TIR_før),0),
+    "TAR baseline" = round(mean(TAR_før),0),
+    "TBR baseline" = round(mean(TBR_før),0),
+  ) |> 
+  knitr::kable()
+        
+ g7sort |> 
+  group_by(`Gruppe`,`Basetreat`) |> 
+  summarise(   
+    "HbA1c ændring" = round(mean(A1c_ændring),0),
+    "TIR ændring" = round(mean(TIR_ændring),0),
+    "TAR ændring" = round(mean(TAR_ændring),0),
+    "TBR ændring" = round(mean(TBR_ændring),0)
   ) |> 
   knitr::kable()
 ```
@@ -173,7 +183,7 @@ ggplot(controlbaselinesimple, aes(x = endeligtid, y = endeligglucose)) +
   geom_hline(yintercept = 3.9) +
   geom_hline(yintercept = 10) +
   geom_smooth() +
-  ylim(2,22) +
+  ylim(2,23) +
   labs(y="Blood glucose (mmol/L)",x="Time of day") +
   theme(text = element_text(size = 20))
 
@@ -182,7 +192,7 @@ ggplot(aidbaselinesimple, aes(x = endeligtid, y = endeligglucose)) +
   geom_hline(yintercept = 3.9) +
   geom_hline(yintercept = 10) +
   geom_smooth() +
-  ylim(2,22) +
+  ylim(2,23) +
   labs(y="Blood glucose (mmol/L)",x="Time of day") +
   theme(text = element_text(size = 20))
 ```
@@ -199,7 +209,7 @@ ggplot(controlfollowupsimple, aes(x = endeligtid, y = endeligglucose)) +
   geom_hline(yintercept = 3.9) +
   geom_hline(yintercept = 10) +
   geom_smooth() +
-  ylim(2,22) +
+  ylim(2,23) +
   labs(y="Blood glucose (mmol/L)",x="Time of day") +
   theme(text = element_text(size = 20))
 
@@ -208,7 +218,7 @@ ggplot(aidfollowupsimple, aes(x = endeligtid, y = endeligglucose)) +
   geom_hline(yintercept = 3.9) +
   geom_hline(yintercept = 10) +
   geom_smooth() +
-  ylim(2,22) +
+  ylim(2,23) +
   labs(y="Blood glucose (mmol/L)",x="Time of day") +
   theme(text = element_text(size = 20))
 ```
